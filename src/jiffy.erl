@@ -189,7 +189,11 @@ init() ->
         Path ->
             Path
     end,
-    erlang:load_nif(filename:join(PrivDir, "jiffy"), 0).
+    SoDir = case filelib:is_dir(PrivDir) of
+        true -> PrivDir;
+        false -> filename:dirname(filename:dirname(filename:dirname(PrivDir)))
+    end,
+    erlang:load_nif(filename:join(SoDir, "jiffy"), 0).
 
 
 decode_loop(Data, Decoder, Val, Objs, Curr) ->
